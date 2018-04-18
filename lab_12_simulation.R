@@ -24,12 +24,19 @@ run_simulations <- function(n_trials, n, p, cutoff) {
     data <- generate_data(n,p)
     pvals <- c(pvals, model_select(data$covariates, data$responses, cutoff))
   }
-  
-  hist(x = pvals, main = paste("Histogram of PVals at ", n_trials, " trials, n = ", n, " p = ", p, sep = ''))
+  write.csv(x = pvals, file = paste("run_sim_", n_trials, "_", n, "_", p, ".csv", sep = ""))
+}
+
+make_plot <- function(datapath) {
+  data <- read.csv(datapath)
+  hist(x = data$x, main = "Histogram of PVals")
 }
 
 for (n in c(100, 1000, 10000)) {
   for (p in c(10, 20, 50)) {
-    run_simulations(1000, n, p, 0.05)
+    run_simulations(100, n, p, 0.05)
+    make_plot(paste("run_sim_100_", n, "_", p, ".csv", sep = ""))
   }
 }
+
+
